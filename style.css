@@ -1,0 +1,100 @@
+:root {
+  --grid-color: 2px solid grey;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 80%;
+  gap: 30px;
+}
+
+.title {
+  margin-top: 50px;
+  font-size: 80px;
+  text-align: center;
+}
+
+.instructions {
+  font-size: 20px;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  gap: 70px;
+  align-items: center;
+}
+
+/*button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 16px;
+  background-color: azure;
+  border: 1.5px solid grey;
+  border-radius: 14px;
+  font-size: 16px;
+}*/
+
+button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px;
+  transition-duration: 0.4s;
+}
+
+button:hover {
+  background-color: #3e8e41; /* Dark green */
+}
+
+.board {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+}
+
+/* tic tac toe board styling */
+#c0,
+#c1 {
+  border-right: var(--grid-color);
+}
+
+#c3,
+#c4 {
+  border-top: var(--grid-color);
+  border-right: var(--grid-color);
+}
+
+#c6,
+#c7 {
+  border-top: var(--grid-color);
+  border-right: var(--grid-color);
+}
+
+#c5,
+#c8 {
+  border-top: var(--grid-color);
+}
