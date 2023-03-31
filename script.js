@@ -73,7 +73,6 @@ function playerTurn() {
 
 const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
-  let attributeValue = cell.getAttribute("cell-id");
   cell.addEventListener("click", handleCellClick);
 });
 
@@ -89,6 +88,9 @@ function handleCellClick() {
     if (win === true) {
       currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
       disableCells();
+    } else if (checkTie() === true) {
+      currentPlayer.textContent =
+        "It's a tie! Hit the reset button to play again.";
     }
   } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
     cell.textContent = "O";
@@ -99,6 +101,9 @@ function handleCellClick() {
     if (win === true) {
       currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
       disableCells();
+    } else if (checkTie() === true) {
+      currentPlayer.textContent =
+        "It's a tie! Hit the reset button to play again.";
     }
   }
 }
@@ -129,6 +134,15 @@ const resetBtn = document.querySelector(".restart");
 resetBtn.addEventListener("click", function () {
   clear();
 });
+
+function checkTie() {
+  for (let i = 0; i < cells.length; i++) {
+    if (cells[i].textContent === "") {
+      return false;
+    }
+  }
+  return true;
+}
 
 function clear() {
   // clear board
