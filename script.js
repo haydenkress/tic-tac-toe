@@ -90,7 +90,7 @@ function handleCellClick() {
       disableCells();
     } else if (checkTie() === true) {
       currentPlayer.textContent =
-        "It's a tie! Hit the reset button to play again.";
+        "It's a tie! Hit the restart button to play again.";
     }
   } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
     cell.textContent = "O";
@@ -103,7 +103,7 @@ function handleCellClick() {
       disableCells();
     } else if (checkTie() === true) {
       currentPlayer.textContent =
-        "It's a tie! Hit the reset button to play again.";
+        "It's a tie! Hit the restart button to play again.";
     }
   }
 }
