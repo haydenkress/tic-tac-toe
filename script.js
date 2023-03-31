@@ -74,28 +74,40 @@ function playerTurn() {
 const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
   let attributeValue = cell.getAttribute("cell-id");
-  cell.addEventListener("click", function () {
-    if (createGame.count % 2 === 0 && cell.textContent === "") {
-      cell.textContent = "X";
-      createGame.count++;
-      playerTurn();
-      createGame.playerOne.cells.push(Number(attributeValue));
-      const win = checkWin(createGame.playerOne.cells);
-      if (win === true) {
-        currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
-      }
-    } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
-      cell.textContent = "O";
-      createGame.count++;
-      playerTurn();
-      createGame.playerTwo.cells.push(Number(attributeValue));
-      const win = checkWin(createGame.playerTwo.cells);
-      if (win === true) {
-        currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
-      }
-    }
-  });
+  cell.addEventListener("click", handleCellClick);
 });
+
+function handleCellClick() {
+  const cell = this;
+  let attributeValue = cell.getAttribute("cell-id");
+  if (createGame.count % 2 === 0 && cell.textContent === "") {
+    cell.textContent = "X";
+    createGame.count++;
+    playerTurn();
+    createGame.playerOne.cells.push(Number(attributeValue));
+    const win = checkWin(createGame.playerOne.cells);
+    if (win === true) {
+      currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
+      disableCells();
+    }
+  } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
+    cell.textContent = "O";
+    createGame.count++;
+    playerTurn();
+    createGame.playerTwo.cells.push(Number(attributeValue));
+    const win = checkWin(createGame.playerTwo.cells);
+    if (win === true) {
+      currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
+      disableCells();
+    }
+  }
+}
+
+function disableCells() {
+  cells.forEach((cell) => {
+    cell.removeEventListener("click", handleCellClick);
+  });
+}
 
 function checkWin(parentArray) {
   const isSubset = (parentArray, subsetArray) =>
@@ -125,4 +137,7 @@ function clear() {
   createGame.playerTwo.cells = [];
   createGame.count = 0;
   playerTurn();
+  cells.forEach((cell) => {
+    cell.addEventListener("click", handleCellClick);
+  });
 }
