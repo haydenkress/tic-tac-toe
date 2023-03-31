@@ -39,17 +39,6 @@ body {
   align-items: center;
 }
 
-/*button {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  padding: 10px 16px;
-  background-color: azure;
-  border: 1.5px solid grey;
-  border-radius: 14px;
-  font-size: 16px;
-}*/
-
 button {
   background-color: #4caf50; /* Green */
   border: none;
@@ -70,10 +59,16 @@ button:hover {
 }
 
 .board {
-  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
 }
 
 /* tic tac toe board styling */
