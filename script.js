@@ -14,7 +14,6 @@ const winningCombinations = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-
 const playerOne = Player("PlayerOne");
 const playerTwo = Player("PlayerTwo");
 
@@ -28,12 +27,18 @@ cells.forEach((cell) => {
       cell.textContent = "X";
       count++;
       playerOne.cells.push(Number(attributeValue));
-      checkWin(playerOne.cells);
+      const win = checkWin(playerOne.cells);
+      if (win === true) {
+        console.log("player one has won");
+      }
     } else if (count % 2 !== 0 && cell.textContent === "") {
       cell.textContent = "O";
       count++;
       playerTwo.cells.push(Number(attributeValue));
-      checkWin(playerTwo.cells);
+      const win = checkWin(playerTwo.cells);
+      if (win === true) {
+        console.log("player two has won");
+      }
     }
   });
 });
@@ -42,10 +47,26 @@ function checkWin(parentArray) {
   const isSubset = (parentArray, subsetArray) =>
     subsetArray.every((item) => parentArray.includes(item));
 
+  let isWinningCombination = false;
+
   winningCombinations.forEach((combination) => {
     const result = isSubset(parentArray, combination);
     if (result === true) {
-      console.log("hello");
+      isWinningCombination = true;
     }
   });
+
+  return isWinningCombination;
+}
+const resetBtn = document.querySelector(".restart");
+resetBtn.addEventListener("click", function () {
+  clear();
+});
+
+function clear() {
+  // clear board
+  cells.forEach((cell) => (cell.textContent = ""));
+  playerOne.cells = [];
+  playerTwo.cells = [];
+  count = 0;
 }
