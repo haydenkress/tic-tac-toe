@@ -1,6 +1,7 @@
 :root {
   --grid-color: 2px solid grey;
 }
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;1,400&display=swap");
 
 body {
   padding: 0;
@@ -10,6 +11,7 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  font-family: "Roboto Mono", sans-serif;
 }
 
 .main {
@@ -39,17 +41,6 @@ body {
   align-items: center;
 }
 
-/*button {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  padding: 10px 16px;
-  background-color: azure;
-  border: 1.5px solid grey;
-  border-radius: 14px;
-  font-size: 16px;
-}*/
-
 button {
   background-color: #4caf50; /* Green */
   border: none;
@@ -58,7 +49,7 @@ button {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 18px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 25px;
@@ -70,10 +61,16 @@ button:hover {
 }
 
 .board {
-  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
 }
 
 /* tic tac toe board styling */
@@ -97,4 +94,34 @@ button:hover {
 #c5,
 #c8 {
   border-top: var(--grid-color);
+}
+
+.current-player {
+  font-size: 20px;
+}
+
+.player-name {
+  font-size: 20px;
+}
+
+.credits {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  padding: 20px;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 400px) {
+  .title {
+    margin-top: 50px;
+    font-size: 50px;
+    text-align: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
 }
