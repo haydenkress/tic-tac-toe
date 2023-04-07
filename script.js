@@ -1,6 +1,3 @@
-const currentPlayer = document.querySelector(".current-player");
-const cells = document.querySelectorAll(".cell");
-
 function Player(name, goesFirst) {
   let cells = [];
 
@@ -65,100 +62,108 @@ const createGame = (() => {
   };
 })();
 
-playerTurn();
-function playerTurn() {
-  if (createGame.count % 2 === 0) {
-    currentPlayer.textContent = `${createGame.playerOne.name} is up!`;
-  } else {
-    currentPlayer.textContent = `${createGame.playerTwo.name} is up!`;
+const cellClick = (function () {
+  const cells = document.querySelectorAll(".cell");
+  const currentPlayer = document.querySelector(".current-player");
+
+  function addCells() {
+    cells.forEach((cell) => {
+      cell.addEventListener("click", handleCellClick);
+    });
   }
-}
+  addCells();
 
-cells.forEach((cell) => {
-  cell.addEventListener("click", handleCellClick);
-});
-
-function handleCellClick() {
-  const cell = this;
-  let attributeValue = cell.getAttribute("cell-id");
-  if (createGame.count % 2 === 0 && cell.textContent === "") {
-    cell.textContent = "X";
-    createGame.count++;
-    playerTurn();
-    createGame.playerOne.cells.push(Number(attributeValue));
-    const win = checkWin(createGame.playerOne.cells);
-    if (win === true) {
-      currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
-      disableCells();
-    } else if (checkTie() === true) {
-      currentPlayer.textContent =
-        "It's a tie! Hit the restart button to play again.";
-    }
-  } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
-    cell.textContent = "O";
-    createGame.count++;
-    playerTurn();
-    createGame.playerTwo.cells.push(Number(attributeValue));
-    const win = checkWin(createGame.playerTwo.cells);
-    if (win === true) {
-      currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
-      disableCells();
-    } else if (checkTie() === true) {
-      currentPlayer.textContent =
-        "It's a tie! Hit the restart button to play again.";
+  function playerTurn() {
+    if (createGame.count % 2 === 0) {
+      currentPlayer.textContent = `${createGame.playerOne.name} is up!`;
+    } else {
+      currentPlayer.textContent = `${createGame.playerTwo.name} is up!`;
     }
   }
-}
+  playerTurn();
 
-function disableCells() {
-  cells.forEach((cell) => {
-    cell.removeEventListener("click", handleCellClick);
-  });
-}
+  function checkWin(parentArray) {
+    const isSubset = (parentArray, subsetArray) =>
+      subsetArray.every((item) => parentArray.includes(item));
 
-function checkWin(parentArray) {
-  const isSubset = (parentArray, subsetArray) =>
-    subsetArray.every((item) => parentArray.includes(item));
+    let isWinningCombination = false;
 
-  let isWinningCombination = false;
+    createGame.winningCombinations.forEach((combination) => {
+      const result = isSubset(parentArray, combination);
+      if (result === true) {
+        isWinningCombination = true;
+      }
+    });
+    return isWinningCombination;
+  }
 
-  createGame.winningCombinations.forEach((combination) => {
-    const result = isSubset(parentArray, combination);
-    if (result === true) {
-      isWinningCombination = true;
-    }
-  });
-  return isWinningCombination;
-}
-
-function checkTie() {
-  for (let i = 0; i < cells.length; i++) {
-    if (cells[i].textContent === "") {
-      return false;
+  function handleCellClick() {
+    const cell = this;
+    let attributeValue = cell.getAttribute("cell-id");
+    if (createGame.count % 2 === 0 && cell.textContent === "") {
+      cell.textContent = "X";
+      createGame.count++;
+      playerTurn();
+      createGame.playerOne.cells.push(Number(attributeValue));
+      const win = checkWin(createGame.playerOne.cells);
+      if (win === true) {
+        currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
+        disableCells();
+      } else if (checkTie() === true) {
+        currentPlayer.textContent =
+          "It's a tie! Hit the restart button to play again.";
+      }
+    } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
+      cell.textContent = "O";
+      createGame.count++;
+      playerTurn();
+      createGame.playerTwo.cells.push(Number(attributeValue));
+      const win = checkWin(createGame.playerTwo.cells);
+      if (win === true) {
+        currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
+        disableCells();
+      } else if (checkTie() === true) {
+        currentPlayer.textContent =
+          "It's a tie! Hit the restart button to play again.";
+      }
     }
   }
-  return true;
-}
+
+  function disableCells() {
+    cells.forEach((cell) => {
+      cell.removeEventListener("click", handleCellClick);
+    });
+  }
+
+  function checkTie() {
+    for (let i = 0; i < cells.length; i++) {
+      if (cells[i].textContent === "") {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  return {
+    cells,
+    addCells,
+    playerTurn,
+  };
+})();
 
 const ResetModule = (function () {
   const resetBtn = document.querySelector(".restart");
 
   function clear() {
-    cells.forEach((cell) => (cell.textContent = ""));
+    cellClick.cells.forEach((cell) => (cell.textContent = ""));
     createGame.playerOne.cells = [];
     createGame.playerTwo.cells = [];
     createGame.count = 0;
-    playerTurn();
-    cells.forEach((cell) => {
-      cell.addEventListener("click", handleCellClick);
-    });
+    cellClick.playerTurn();
+    cellClick.addCells();
   }
 
   resetBtn.addEventListener("click", function () {
     clear();
   });
-
-  return {
-    clear,
-  };
 })();
