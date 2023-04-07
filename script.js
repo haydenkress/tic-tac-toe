@@ -4,6 +4,16 @@ function Player(name, goesFirst) {
   return { name, cells, goesFirst };
 }
 
+const createGame = (() => {
+  const playerOne = Player("Player One", true);
+  const playerTwo = Player("Player Two", false);
+
+  return {
+    playerOne,
+    playerTwo,
+  };
+})();
+
 const changeName = (function () {
   const playerName = document.querySelectorAll(".player-name");
 
@@ -38,7 +48,7 @@ const changeName = (function () {
   });
 })();
 
-const createGame = (() => {
+const cellClick = (function () {
   const winningCombinations = [
     [0, 1, 2],
     [3, 4, 5],
@@ -49,22 +59,9 @@ const createGame = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  const playerOne = Player("Player One", true);
-  const playerTwo = Player("Player Two", false);
-  let count = 0;
-
-  return {
-    winningCombinations,
-    playerOne,
-    playerTwo,
-    count,
-  };
-})();
-
-const cellClick = (function () {
   const cells = document.querySelectorAll(".cell");
   const currentPlayer = document.querySelector(".current-player");
+  let count = 0;
 
   function addCells() {
     cells.forEach((cell) => {
@@ -74,7 +71,7 @@ const cellClick = (function () {
   addCells();
 
   function playerTurn() {
-    if (createGame.count % 2 === 0) {
+    if (count % 2 === 0) {
       currentPlayer.textContent = `${createGame.playerOne.name} is up!`;
     } else {
       currentPlayer.textContent = `${createGame.playerTwo.name} is up!`;
@@ -88,7 +85,7 @@ const cellClick = (function () {
 
     let isWinningCombination = false;
 
-    createGame.winningCombinations.forEach((combination) => {
+    winningCombinations.forEach((combination) => {
       const result = isSubset(parentArray, combination);
       if (result === true) {
         isWinningCombination = true;
@@ -100,9 +97,9 @@ const cellClick = (function () {
   function handleCellClick() {
     const cell = this;
     let attributeValue = cell.getAttribute("cell-id");
-    if (createGame.count % 2 === 0 && cell.textContent === "") {
+    if (count % 2 === 0 && cell.textContent === "") {
       cell.textContent = "X";
-      createGame.count++;
+      count++;
       playerTurn();
       createGame.playerOne.cells.push(Number(attributeValue));
       const win = checkWin(createGame.playerOne.cells);
@@ -115,7 +112,7 @@ const cellClick = (function () {
       }
     } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
       cell.textContent = "O";
-      createGame.count++;
+      count++;
       playerTurn();
       createGame.playerTwo.cells.push(Number(attributeValue));
       const win = checkWin(createGame.playerTwo.cells);
@@ -128,6 +125,21 @@ const cellClick = (function () {
       }
     }
   }
+
+  const resetBtn = document.querySelector(".restart");
+
+  function clear() {
+    cells.forEach((cell) => (cell.textContent = ""));
+    createGame.playerOne.cells = [];
+    createGame.playerTwo.cells = [];
+    count = 0;
+    playerTurn();
+    addCells();
+  }
+
+  resetBtn.addEventListener("click", function () {
+    clear();
+  });
 
   function disableCells() {
     cells.forEach((cell) => {
@@ -143,27 +155,4 @@ const cellClick = (function () {
     }
     return true;
   }
-
-  return {
-    cells,
-    addCells,
-    playerTurn,
-  };
-})();
-
-const ResetModule = (function () {
-  const resetBtn = document.querySelector(".restart");
-
-  function clear() {
-    cellClick.cells.forEach((cell) => (cell.textContent = ""));
-    createGame.playerOne.cells = [];
-    createGame.playerTwo.cells = [];
-    createGame.count = 0;
-    cellClick.playerTurn();
-    cellClick.addCells();
-  }
-
-  resetBtn.addEventListener("click", function () {
-    clear();
-  });
 })();
