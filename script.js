@@ -1,5 +1,3 @@
-const resetBtn = document.querySelector(".restart");
-const playerName = document.querySelectorAll(".player-name");
 const currentPlayer = document.querySelector(".current-player");
 const cells = document.querySelectorAll(".cell");
 
@@ -9,36 +7,39 @@ function Player(name, goesFirst) {
   return { name, cells, goesFirst };
 }
 
-// double click to change name
-playerName.forEach((player) => {
-  player.addEventListener("dblclick", function () {
-    const currentValue = player.textContent;
-    const inputElement = document.createElement("input");
-    inputElement.type = "text";
-    inputElement.value = currentValue;
+const changeName = (function () {
+  const playerName = document.querySelectorAll(".player-name");
 
-    inputElement.addEventListener("blur", function () {
-      const newValue = inputElement.value;
-      const textNode = document.createTextNode(newValue);
-      player.removeChild(inputElement);
-      player.appendChild(textNode);
+  playerName.forEach((player) => {
+    player.addEventListener("dblclick", function () {
+      const currentValue = player.textContent;
+      const inputElement = document.createElement("input");
+      inputElement.type = "text";
+      inputElement.value = currentValue;
 
-      const playerObject = player.classList.contains("player-one")
-        ? createGame.playerOne
-        : createGame.playerTwo;
+      inputElement.addEventListener("blur", function () {
+        const newValue = inputElement.value;
+        const textNode = document.createTextNode(newValue);
+        player.removeChild(inputElement);
+        player.appendChild(textNode);
 
-      function changeName(newName) {
-        playerObject.name = newName;
-      }
+        const playerObject = player.classList.contains("player-one")
+          ? createGame.playerOne
+          : createGame.playerTwo;
 
-      changeName(newValue);
+        function changeName(newName) {
+          playerObject.name = newName;
+        }
+
+        changeName(newValue);
+      });
+
+      player.removeChild(player.firstChild);
+      player.appendChild(inputElement);
+      inputElement.focus();
     });
-
-    player.removeChild(player.firstChild);
-    player.appendChild(inputElement);
-    inputElement.focus();
   });
-});
+})();
 
 const createGame = (() => {
   const winningCombinations = [
@@ -130,12 +131,6 @@ function checkWin(parentArray) {
   return isWinningCombination;
 }
 
-// reset button
-
-resetBtn.addEventListener("click", function () {
-  clear();
-});
-
 function checkTie() {
   for (let i = 0; i < cells.length; i++) {
     if (cells[i].textContent === "") {
@@ -145,14 +140,25 @@ function checkTie() {
   return true;
 }
 
-function clear() {
-  // clear board
-  cells.forEach((cell) => (cell.textContent = ""));
-  createGame.playerOne.cells = [];
-  createGame.playerTwo.cells = [];
-  createGame.count = 0;
-  playerTurn();
-  cells.forEach((cell) => {
-    cell.addEventListener("click", handleCellClick);
+const ResetModule = (function () {
+  const resetBtn = document.querySelector(".restart");
+
+  function clear() {
+    cells.forEach((cell) => (cell.textContent = ""));
+    createGame.playerOne.cells = [];
+    createGame.playerTwo.cells = [];
+    createGame.count = 0;
+    playerTurn();
+    cells.forEach((cell) => {
+      cell.addEventListener("click", handleCellClick);
+    });
+  }
+
+  resetBtn.addEventListener("click", function () {
+    clear();
   });
-}
+
+  return {
+    clear,
+  };
+})();
