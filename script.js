@@ -79,19 +79,20 @@ const cellClick = (function () {
   }
   playerTurn();
 
-  function checkWin(parentArray) {
-    const isSubset = (parentArray, subsetArray) =>
-      subsetArray.every((item) => parentArray.includes(item));
-
-    let isWinningCombination = false;
+  function checkWin(player, playerArray) {
+    const isSubset = (playerArray, subsetArray) =>
+      subsetArray.every((item) => playerArray.includes(item));
 
     winningCombinations.forEach((combination) => {
-      const result = isSubset(parentArray, combination);
+      const result = isSubset(playerArray, combination);
       if (result === true) {
-        isWinningCombination = true;
+        currentPlayer.textContent = `${player.name} has won!`;
+        disableCells();
+      } else if (checkTie() === true) {
+        currentPlayer.textContent =
+          "It's a tie! Hit the restart button to play again.";
       }
     });
-    return isWinningCombination;
   }
 
   function handleCellClick() {
@@ -102,27 +103,13 @@ const cellClick = (function () {
       count++;
       playerTurn();
       createGame.playerOne.cells.push(Number(attributeValue));
-      const win = checkWin(createGame.playerOne.cells);
-      if (win === true) {
-        currentPlayer.textContent = `${createGame.playerOne.name} has won!`;
-        disableCells();
-      } else if (checkTie() === true) {
-        currentPlayer.textContent =
-          "It's a tie! Hit the restart button to play again.";
-      }
+      checkWin(createGame.playerOne, createGame.playerOne.cells);
     } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
       cell.textContent = "O";
       count++;
       playerTurn();
       createGame.playerTwo.cells.push(Number(attributeValue));
-      const win = checkWin(createGame.playerTwo.cells);
-      if (win === true) {
-        currentPlayer.textContent = `${createGame.playerTwo.name} has won!`;
-        disableCells();
-      } else if (checkTie() === true) {
-        currentPlayer.textContent =
-          "It's a tie! Hit the restart button to play again.";
-      }
+      checkWin(createGame.playerTwo, createGame.playerTwo.cells);
     }
   }
 
