@@ -1,11 +1,13 @@
+const resetBtn = document.querySelector(".restart");
+const playerName = document.querySelectorAll(".player-name");
+const currentPlayer = document.querySelector(".current-player");
+const cells = document.querySelectorAll(".cell");
+
 function Player(name, goesFirst) {
   let cells = [];
 
   return { name, cells, goesFirst };
 }
-
-const playerName = document.querySelectorAll(".player-name");
-const currentPlayer = document.querySelector(".current-player");
 
 // double click to change name
 playerName.forEach((player) => {
@@ -71,7 +73,6 @@ function playerTurn() {
   }
 }
 
-const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
   cell.addEventListener("click", handleCellClick);
 });
@@ -130,7 +131,7 @@ function checkWin(parentArray) {
 }
 
 // reset button
-const resetBtn = document.querySelector(".restart");
+
 resetBtn.addEventListener("click", function () {
   clear();
 });
