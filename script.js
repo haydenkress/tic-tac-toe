@@ -5,6 +5,28 @@ function Player(name, goesFirst) {
 }
 
 const createGame = (() => {
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  const playerOne = Player("Player One", true);
+  const playerTwo = Player("Player Two", false);
+
+  return {
+    winningCombinations,
+    playerOne,
+    playerTwo,
+  };
+})();
+
+const createGame = (() => {
   const playerOne = Player("Player One", true);
   const playerTwo = Player("Player Two", false);
 
@@ -49,6 +71,8 @@ const changeName = (function () {
 })();
 
 const cellClick = (function () {
+
+const cellClick = (function () {
   const winningCombinations = [
     [0, 1, 2],
     [3, 4, 5],
@@ -62,6 +86,7 @@ const cellClick = (function () {
   const cells = document.querySelectorAll(".cell");
   const currentPlayer = document.querySelector(".current-player");
   let count = 0;
+  let count = 0;
 
   function addCells() {
     cells.forEach((cell) => {
@@ -71,6 +96,7 @@ const cellClick = (function () {
   addCells();
 
   function playerTurn() {
+    if (count % 2 === 0) {
     if (count % 2 === 0) {
       currentPlayer.textContent = `${createGame.playerOne.name} is up!`;
     } else {
@@ -98,7 +124,9 @@ const cellClick = (function () {
     const cell = this;
     let attributeValue = cell.getAttribute("cell-id");
     if (count % 2 === 0 && cell.textContent === "") {
+    if (count % 2 === 0 && cell.textContent === "") {
       cell.textContent = "X";
+      count++;
       count++;
       playerTurn();
       createGame.playerOne.cells.push(Number(attributeValue));
@@ -112,6 +140,7 @@ const cellClick = (function () {
       }
     } else if (playerTurn.count % 2 !== 0 && cell.textContent === "") {
       cell.textContent = "O";
+      count++;
       count++;
       playerTurn();
       createGame.playerTwo.cells.push(Number(attributeValue));
@@ -129,7 +158,7 @@ const cellClick = (function () {
   const resetBtn = document.querySelector(".restart");
 
   function clear() {
-    cells.forEach((cell) => (cell.textContent = ""));
+    cellClick.cells.forEach((cell) => (cell.textContent = ""));
     createGame.playerOne.cells = [];
     createGame.playerTwo.cells = [];
     count = 0;
@@ -155,4 +184,10 @@ const cellClick = (function () {
     }
     return true;
   }
+
+  /*   return {
+    cells,
+    addCells,
+    playerTurn,
+  }; */
 })();
