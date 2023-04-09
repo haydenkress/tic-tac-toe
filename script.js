@@ -83,16 +83,31 @@ const cellClick = (function () {
     const isSubset = (playerArray, subsetArray) =>
       subsetArray.every((item) => playerArray.includes(item));
 
-    winningCombinations.forEach((combination) => {
+    function checkPlayerWin(combination) {
       const result = isSubset(playerArray, combination);
       if (result === true) {
         currentPlayer.textContent = `${player.name} has won!`;
         disableCells();
-      } else if (checkTie() === true) {
-        currentPlayer.textContent =
-          "It's a tie! Hit the restart button to play again.";
+        return true;
       }
-    });
+      return false;
+    }
+
+    for (let i = 0; i < winningCombinations.length; i++) {
+      const combination = winningCombinations[i];
+      if (checkPlayerWin(combination) === true) {
+        return;
+      }
+    }
+
+    for (let i = 0; i < cells.length; i++) {
+      if (cells[i].textContent === "") {
+        return;
+      }
+    }
+
+    currentPlayer.textContent =
+      "It's a tie! Hit the restart button to play again.";
   }
 
   function handleCellClick() {
@@ -132,14 +147,5 @@ const cellClick = (function () {
     cells.forEach((cell) => {
       cell.removeEventListener("click", handleCellClick);
     });
-  }
-
-  function checkTie() {
-    for (let i = 0; i < cells.length; i++) {
-      if (cells[i].textContent === "") {
-        return false;
-      }
-    }
-    return true;
   }
 })();
