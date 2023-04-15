@@ -37,8 +37,24 @@ body {
 
 .controls {
   display: flex;
-  gap: 70px;
   align-items: center;
+  gap: 70px;
+}
+
+.player-name {
+  flex: 1;
+  text-align: center;
+}
+
+.restart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.restart {
+  /* Add any additional styling for the restart button here */
 }
 
 button {
