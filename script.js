@@ -14,40 +14,6 @@ const createGame = (() => {
   };
 })();
 
-const changeName = (function () {
-  const playerName = document.querySelectorAll(".player-name");
-
-  playerName.forEach((player) => {
-    player.addEventListener("dblclick", function () {
-      const currentValue = player.textContent;
-      const inputElement = document.createElement("input");
-      inputElement.type = "text";
-      inputElement.value = currentValue;
-
-      inputElement.addEventListener("blur", function () {
-        const newValue = inputElement.value;
-        const textNode = document.createTextNode(newValue);
-        player.removeChild(inputElement);
-        player.appendChild(textNode);
-
-        const playerObject = player.classList.contains("player-one")
-          ? createGame.playerOne
-          : createGame.playerTwo;
-
-        function changeName(newName) {
-          playerObject.name = newName;
-        }
-
-        changeName(newValue);
-      });
-
-      player.removeChild(player.firstChild);
-      player.appendChild(inputElement);
-      inputElement.focus();
-    });
-  });
-})();
-
 const cellClick = (function () {
   const winningCombinations = [
     [0, 1, 2],
@@ -148,4 +114,37 @@ const cellClick = (function () {
       cell.removeEventListener("click", handleCellClick);
     });
   }
+  function updatePlayerName(playerElement, newName) {
+    const playerObject = playerElement.classList.contains("player-one")
+      ? createGame.playerOne
+      : createGame.playerTwo;
+    playerObject.name = newName;
+    const textNode = document.createTextNode(newName);
+    playerElement.removeChild(playerElement.firstChild);
+    playerElement.appendChild(textNode);
+    playerTurn();
+  }
+
+  const changeName = (function () {
+    const playerName = document.querySelectorAll(".player-name");
+
+    playerName.forEach((player) => {
+      player.addEventListener("dblclick", function () {
+        const currentValue = player.textContent;
+        const inputElement = document.createElement("input");
+        inputElement.type = "text";
+        inputElement.value = currentValue;
+
+        inputElement.addEventListener("blur", function () {
+          const newValue = inputElement.value;
+          updatePlayerName(player, newValue);
+        });
+        if (player.firstChild) {
+          player.removeChild(player.firstChild);
+        }
+        player.appendChild(inputElement);
+        inputElement.focus();
+      });
+    });
+  })();
 })();
